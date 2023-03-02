@@ -3,7 +3,10 @@
         "outDir": "dist",
         "target": "es2022",
         "module": "commonjs",
-        "rootDir": "src",
+        "rootDirs": [
+            "src",
+            "tests"
+        ],
         "moduleResolution": "node",
         "baseUrl": "src",
         "strict": true,
@@ -21,6 +24,7 @@
         }
     },
     "include": [
-        "src"
+        "src",
+        "tests"
     ]
 }
