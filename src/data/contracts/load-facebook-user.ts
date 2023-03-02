@@ -6,4 +6,6 @@ export namespace LoadFacebookUser {
     export type Params = {
         token: string
     }
+
+    export type Resolve = undefined
 }
