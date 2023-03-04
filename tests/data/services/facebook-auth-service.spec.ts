@@ -93,4 +93,12 @@ describe('FacebookAuthService', () => {
 
         await expect(result).rejects.toThrow(new Error('server error'))
     })
+
+    it('should throw if LoadUserAccountRepository throws', async () => {
+        userAccountRepository.load.mockRejectedValueOnce(new Error('server error'))
+
+        const result = sut.execute({ token })
+
+        await expect(result).rejects.toThrow(new Error('server error'))
+    })
 })
