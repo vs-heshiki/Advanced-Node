@@ -29,6 +29,7 @@ describe('FacebookAuthService', () => {
         userAccountRepository.saveWithFacebook.mockResolvedValue({ id: 'any_id' })
 
         crypto = mock()
+        crypto.genToken.mockResolvedValue('any_access_token')
 
         sut = new FacebookAuthService(
             facebookApi,
@@ -45,9 +46,11 @@ describe('FacebookAuthService', () => {
     })
 
     it('should return AuthenticatiorError if LoadFacebookUser returns undefined', async () => {
-        const facebookApi = await sut.execute({ token })
+        facebookApi.loadUser.mockResolvedValueOnce(undefined)
 
-        expect(facebookApi).toEqual(new AuthenticatorError())
+        const result = await sut.execute({ token })
+
+        expect(result).toEqual(new AuthenticatorError())
     })
 
     it('should call UserAccountRepository if LoadFacebookUser returns data', async () => {
@@ -75,5 +78,19 @@ describe('FacebookAuthService', () => {
             expirationInMs: AccessToken.expirationInMs
         })
         expect(crypto.genToken).toHaveBeenCalledTimes(1)
+    })
+
+    it('should return a AccessToken on success', async () => {
+        const accessToken = await sut.execute({ token })
+
+        expect(accessToken).toEqual(new AccessToken('any_access_token'))
+    })
+
+    it('should throw if LoadFacebookUser throws', async () => {
+        facebookApi.loadUser.mockRejectedValueOnce(new Error('server error'))
+
+        const result = sut.execute({ token })
+
+        await expect(result).rejects.toThrow(new Error('server error'))
     })
 })

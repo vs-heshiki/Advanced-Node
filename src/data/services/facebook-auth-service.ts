@@ -12,13 +12,14 @@ export class FacebookAuthService {
         private readonly crypto: TokenGenerator
     ) { }
 
-    async execute (params: FacebookAuth.Params): Promise<AuthenticatorError> {
+    async execute (params: FacebookAuth.Params): Promise<FacebookAuth.Resolve> {
         const facebookData = await this.facebookApi.loadUser(params)
         if (facebookData !== undefined) {
             const accountData = await this.userAccountRepository.load({ email: facebookData.email })
             const facebookAccount = new FacebookAccount(facebookData, accountData)
             const { id } = await this.userAccountRepository.saveWithFacebook(facebookAccount)
-            await this.crypto.genToken({ key: id, expirationInMs: AccessToken.expirationInMs })
+            const key = await this.crypto.genToken({ key: id, expirationInMs: AccessToken.expirationInMs })
+            return new AccessToken(key)
         }
         return new AuthenticatorError()
     }

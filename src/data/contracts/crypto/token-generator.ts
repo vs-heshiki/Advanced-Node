@@ -1,5 +1,5 @@
 export interface TokenGenerator {
-    genToken: (params: TokenGenerator.Params) => Promise<void>
+    genToken: (params: TokenGenerator.Params) => Promise<TokenGenerator.Resolve>
 }
 
 export namespace TokenGenerator {
@@ -7,4 +7,6 @@ export namespace TokenGenerator {
         key: string
         expirationInMs: number
     }
+
+    export type Resolve = string
 }
