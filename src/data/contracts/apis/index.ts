@@ -1,1 +1,1 @@
-export * from './load-facebook-user'
+export * from './facebook-api'
