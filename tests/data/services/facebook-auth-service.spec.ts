@@ -109,4 +109,12 @@ describe('FacebookAuthService', () => {
 
         await expect(result).rejects.toThrow(new Error('server error'))
     })
+
+    it('should throw if TokenGenerator throws', async () => {
+        crypto.genToken.mockRejectedValueOnce(new Error('server error'))
+
+        const result = sut.execute({ token })
+
+        await expect(result).rejects.toThrow(new Error('server error'))
+    })
 })
