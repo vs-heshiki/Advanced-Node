@@ -14,6 +14,7 @@ export class FacebookAuthService {
 
     async execute (params: FacebookAuth.Params): Promise<FacebookAuth.Resolve> {
         const facebookData = await this.facebookApi.loadUser(params)
+
         if (facebookData !== undefined) {
             const accountData = await this.userAccountRepository.load({ email: facebookData.email })
             const facebookAccount = new FacebookAccount(facebookData, accountData)
@@ -21,6 +22,7 @@ export class FacebookAuthService {
             const key = await this.crypto.genToken({ key: id, expirationInMs: AccessToken.expirationInMs })
             return new AccessToken(key)
         }
+
         return new AuthenticatorError()
     }
 }

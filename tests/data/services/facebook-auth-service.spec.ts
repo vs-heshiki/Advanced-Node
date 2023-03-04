@@ -16,21 +16,23 @@ describe('FacebookAuthService', () => {
     let sut: FacebookAuthService
     const token = 'any_token'
 
-    beforeEach(() => {
+    beforeAll(() => {
         facebookApi = mock()
-
         facebookApi.loadUser.mockResolvedValue({
             email: 'any_email@facebook.com',
             name: 'any_fb_name',
             facebookId: 'any_fb_id'
         })
+
         userAccountRepository = mock()
         userAccountRepository.load.mockResolvedValue(undefined)
         userAccountRepository.saveWithFacebook.mockResolvedValue({ id: 'any_id' })
 
         crypto = mock()
         crypto.genToken.mockResolvedValue('any_access_token')
+    })
 
+    beforeEach(() => {
         sut = new FacebookAuthService(
             facebookApi,
             userAccountRepository,
