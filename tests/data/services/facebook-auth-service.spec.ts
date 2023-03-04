@@ -1,26 +1,44 @@
-import { LoadFacebookUser } from '@/data/contracts'
+import { LoadFacebookUser } from '@/data/contracts/apis'
+import { LoadUserAccountRepository } from '@/data/contracts/repositories'
 import { FacebookAuthService } from '@/data/services'
 import { AuthenticatorError } from '@/domain/errors'
 
-import { mock } from 'jest-mock-extended'
+import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('FacebookAuthService', () => {
+    let loadFacebookUser: MockProxy<LoadFacebookUser>
+    let loadUserAccountRepository: MockProxy<LoadUserAccountRepository>
+    let sut: FacebookAuthService
+    const token = 'any_token'
+
+    beforeEach(() => {
+        loadFacebookUser = mock()
+        loadFacebookUser.loadUser.mockResolvedValue({
+            email: 'any_email@mail.com',
+            name: 'any_name',
+            facebookId: 'any_id'
+        })
+        loadUserAccountRepository = mock()
+        sut = new FacebookAuthService(loadFacebookUser, loadUserAccountRepository)
+    })
+
     it('should call LoadFacebookUser with correct params', async () => {
-        const loadFacebookUser = mock<LoadFacebookUser>()
-        const sut = new FacebookAuthService(loadFacebookUser)
+        await sut.execute({ token })
 
-        await sut.execute({ token: 'any_token' })
-
-        expect(loadFacebookUser.loadUser).toHaveBeenCalledWith({ token: 'any_token' })
+        expect(loadFacebookUser.loadUser).toHaveBeenCalledWith({ token })
         expect(loadFacebookUser.loadUser).toHaveBeenCalledTimes(1)
     })
 
     it('should return AuthenticatiorError if LoadFacebookUser returns undefined', async () => {
-        const loadFacebookUser = mock<LoadFacebookUser>()
-        const sut = new FacebookAuthService(loadFacebookUser)
-
-        const facebookApi = await sut.execute({ token: 'any_token' })
+        const facebookApi = await sut.execute({ token })
 
         expect(facebookApi).toEqual(new AuthenticatorError())
+    })
+
+    it('should call LoadUserAccountRepository if LoadFacebookUser returns data', async () => {
+        await sut.execute({ token })
+
+        expect(loadUserAccountRepository.load).toHaveBeenCalledWith({ email: 'any_email@mail.com' })
+        expect(loadUserAccountRepository.load).toHaveBeenCalledTimes(1)
     })
 })
