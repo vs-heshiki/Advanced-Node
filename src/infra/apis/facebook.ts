@@ -20,11 +20,20 @@ export class FacebookApi {
             }
         })
 
-        await this.httpClient.get({
+        const debugToken = await this.httpClient.get({
             url: `${this.baseUrl}/debug_token`,
             params: {
                 accessToken: appToken.accessToken,
                 inputToken: params.token
+            }
+        })
+
+        await this.httpClient.get({
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            url: `${this.baseUrl}/${debugToken.data.userId}`,
+            params: {
+                fields: ['id', 'name', 'email'].join(','),
+                accessToken: params.token
             }
         })
     }

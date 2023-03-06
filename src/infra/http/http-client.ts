@@ -8,7 +8,5 @@ export namespace HttpGetClient {
         params: object
     }
 
-    export type Resolve = {
-        accessToken: any
-    }
+    export type Resolve = any
 }

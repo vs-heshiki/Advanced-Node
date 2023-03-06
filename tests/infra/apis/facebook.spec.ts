@@ -14,12 +14,14 @@ describe('FacebookApi', () => {
     })
 
     beforeEach(() => {
-        httpClient.get.mockResolvedValueOnce({ accessToken: 'any_app_token' })
+        httpClient.get
+            .mockResolvedValueOnce({ accessToken: 'any_app_token' })
+            .mockResolvedValueOnce({ data: { userId: 'any_user_id' } })
         sut = new FacebookApi(httpClient, clientId, clientSecret)
     })
 
     it('should get app token', async () => {
-        await sut.loadUser({ token: 'any_token' })
+        await sut.loadUser({ token: 'any_client_token' })
 
         expect(httpClient.get).toHaveBeenCalledWith({
             url: 'https://graph.facebook.com/oauth/access_token',
@@ -32,13 +34,25 @@ describe('FacebookApi', () => {
     })
 
     it('should get debug token', async () => {
-        await sut.loadUser({ token: 'any_token' })
+        await sut.loadUser({ token: 'any_client_token' })
 
         expect(httpClient.get).toHaveBeenCalledWith({
             url: 'https://graph.facebook.com/debug_token',
             params: {
                 accessToken: 'any_app_token',
-                inputToken: 'any_token'
+                inputToken: 'any_client_token'
+            }
+        })
+    })
+
+    it('should get user info', async () => {
+        await sut.loadUser({ token: 'any_client_token' })
+
+        expect(httpClient.get).toHaveBeenCalledWith({
+            url: 'https://graph.facebook.com/any_user_id',
+            params: {
+                fields: 'id,name,email',
+                accessToken: 'any_client_token'
             }
         })
     })
