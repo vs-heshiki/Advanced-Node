@@ -8,5 +8,5 @@ export namespace HttpGetClient {
         params: object
     }
 
-    export type Resolve = any
+    export type Resolve<T = any> = T
 }
