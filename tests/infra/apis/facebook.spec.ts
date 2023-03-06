@@ -9,8 +9,12 @@ describe('FacebookApi', () => {
     let httpClient: MockProxy<HttpGetClient>
     let sut: FacebookApi
 
-    beforeEach(() => {
+    beforeAll(() => {
         httpClient = mock()
+    })
+
+    beforeEach(() => {
+        httpClient.get.mockResolvedValueOnce({ accessToken: 'any_app_token' })
         sut = new FacebookApi(httpClient, clientId, clientSecret)
     })
 
@@ -23,6 +27,18 @@ describe('FacebookApi', () => {
                 clientId: 'any_client_id',
                 clientSecret: 'any_client_secret',
                 grantType: 'client_credentials'
+            }
+        })
+    })
+
+    it('should get debug token', async () => {
+        await sut.loadUser({ token: 'any_token' })
+
+        expect(httpClient.get).toHaveBeenCalledWith({
+            url: 'https://graph.facebook.com/debug_token',
+            params: {
+                accessToken: 'any_app_token',
+                inputToken: 'any_token'
             }
         })
     })
