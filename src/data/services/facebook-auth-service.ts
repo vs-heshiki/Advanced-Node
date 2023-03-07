@@ -19,7 +19,7 @@ export class FacebookAuthService {
             const accountData = await this.userAccountRepository.load({ email: facebookData.email })
             const facebookAccount = new FacebookAccount(facebookData, accountData)
             const { id } = await this.userAccountRepository.saveWithFacebook(facebookAccount)
-            const key = await this.crypto.genToken({ key: id, expirationInMs: AccessToken.expirationInMs })
+            const key = await this.crypto.genToken({ key: id, expiresInMs: AccessToken.expiresInMs })
             return new AccessToken(key)
         }
 

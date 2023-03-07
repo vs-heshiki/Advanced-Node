@@ -77,7 +77,7 @@ describe('FacebookAuthService', () => {
 
         expect(crypto.genToken).toHaveBeenCalledWith({
             key: 'any_id',
-            expirationInMs: AccessToken.expirationInMs
+            expiresInMs: AccessToken.expiresInMs
         })
         expect(crypto.genToken).toHaveBeenCalledTimes(1)
     })

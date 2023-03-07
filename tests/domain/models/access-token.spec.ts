@@ -8,6 +8,6 @@ describe('AccessToken', () => {
     })
 
     it('should expiration in 1800000ms', () => {
-        expect(AccessToken.expirationInMs).toBe(1800000)
+        expect(AccessToken.expiresInMs).toBe(1800000)
     })
 })
