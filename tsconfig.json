@@ -17,11 +17,11 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "paths": {
+            "@/tests/*": [
+                "../tests/*"
+            ],
             "@/*": [
                 "*"
-            ],
-            "@/tests/*": [
-                "./tests/*"
             ]
         }
     },

@@ -1,5 +1,6 @@
-import { LoadUserAccountRepository } from '@/data/contracts/repositories'
 import { PgUser } from '@/infra/postgres/entities'
+import { LoadUserAccountRepository } from '@/data/contracts/repositories'
+
 import { DataSource } from 'typeorm'
 
 export class PgUserAccountRepository implements LoadUserAccountRepository {
