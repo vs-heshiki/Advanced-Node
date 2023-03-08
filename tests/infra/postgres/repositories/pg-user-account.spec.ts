@@ -7,29 +7,29 @@ import { DataSource, Repository } from 'typeorm'
 import { IBackup } from 'pg-mem'
 
 describe('PgUserAccountRepository', () => {
+    let pgUserRepo: Repository<PgUser>
+    let dataSource: DataSource
+    let sut: PgUserAccountRepository
+    let backup: IBackup
+
+    beforeAll(async () => {
+        const fakeDb = await makeFakeDb([PgUser])
+
+        dataSource = fakeDb.dataSource
+        pgUserRepo = dataSource.getRepository(PgUser)
+        backup = fakeDb.db.backup()
+    })
+
+    beforeEach(() => {
+        backup.restore()
+        sut = new PgUserAccountRepository(dataSource)
+    })
+
+    afterAll(async () => {
+        await dataSource.destroy()
+    })
+
     describe('Load', () => {
-        let pgUserRepo: Repository<PgUser>
-        let dataSource: DataSource
-        let sut: PgUserAccountRepository
-        let backup: IBackup
-
-        beforeAll(async () => {
-            const fakeDb = await makeFakeDb([PgUser])
-
-            dataSource = fakeDb.dataSource
-            pgUserRepo = dataSource.getRepository(PgUser)
-            backup = fakeDb.db.backup()
-        })
-
-        beforeEach(() => {
-            backup.restore()
-            sut = new PgUserAccountRepository(dataSource)
-        })
-
-        afterAll(async () => {
-            await dataSource.destroy()
-        })
-
         it('should call load with email and return an account', async () => {
             await pgUserRepo.save({ email: 'existing_email@mail.com' })
 
