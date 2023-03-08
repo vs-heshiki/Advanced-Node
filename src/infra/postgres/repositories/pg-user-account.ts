@@ -25,6 +25,13 @@ export class PgUserAccountRepository implements LoadUserAccountRepository {
                 name: params.name,
                 facebookId: params.facebookId
             })
+        } else {
+            await pgUserAccount.update({
+                id: parseInt(params.id)
+            }, {
+                name: params.name,
+                facebookId: params.facebookId
+            })
         }
     }
 }
