@@ -10,7 +10,7 @@ describe('PgUserAccountRepository', () => {
         let dataSource: DataSource
         let sut: PgUserAccountRepository
 
-        beforeAll(async () => {
+        beforeEach(async () => {
             const fakeDb = await makeFakeDb([PgUser])
 
             dataSource = fakeDb.dataSource
@@ -24,6 +24,16 @@ describe('PgUserAccountRepository', () => {
             const account = await sut.load({ email: 'existing_email@mail.com' })
 
             expect(account).toEqual({ id: '1' })
+
+            await dataSource.destroy()
+        })
+
+        it('should call load with email and return undefined if email not exists', async () => {
+            const account = await sut.load({ email: 'undefined_email' })
+
+            expect(account).toBeUndefined()
+
+            await dataSource.destroy()
         })
     })
 })
