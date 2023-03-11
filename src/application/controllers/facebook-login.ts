@@ -1,4 +1,5 @@
 import { FacebookAuth } from '@/domain/features'
+import { AccessToken } from '@/domain/models'
 
 export class FacebookLoginController {
     constructor (private readonly facebookAuth: FacebookAuth) { }
@@ -13,9 +14,18 @@ export class FacebookLoginController {
 
         const resolve = await this.facebookAuth.execute({ token: httpRequest.token })
 
-        return {
-            statusCode: 401,
-            data: resolve
+        if (resolve instanceof AccessToken) {
+            return {
+                statusCode: 200,
+                data: {
+                    accessToken: resolve.key
+                }
+            }
+        } else {
+            return {
+                statusCode: 401,
+                data: resolve
+            }
         }
     }
 }
