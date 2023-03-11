@@ -1,26 +1,26 @@
 import { ServerError, UnauthorizedError } from '@/application/errors'
 
-type HttpResponse = {
+export type HttpResponse<T = any> = {
     statusCode: number
-    data: any
+    data: T
 }
 
-export const success = (data: any): HttpResponse => ({
+export const success = <T = any> (data: T): HttpResponse<T> => ({
     statusCode: 200,
     data
 })
 
-export const serverError = (error: unknown): HttpResponse => ({
+export const serverError = (error: unknown): HttpResponse<unknown> => ({
     statusCode: 500,
     data: new ServerError(error)
 })
 
-export const unauthorized = (): HttpResponse => ({
+export const unauthorized = (): HttpResponse<unknown> => ({
     statusCode: 401,
     data: new UnauthorizedError()
 })
 
-export const badRequest = (error: unknown): HttpResponse => ({
+export const badRequest = (error: unknown): HttpResponse<unknown> => ({
     statusCode: 400,
     data: error
 })
