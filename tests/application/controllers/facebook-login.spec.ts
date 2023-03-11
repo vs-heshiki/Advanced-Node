@@ -1,10 +1,18 @@
-import { FacebookAuthController } from '@/application/controllers'
+import { FacebookLoginController } from '@/application/controllers'
+import { FacebookAuth } from '@/domain/features'
+
+import { MockProxy, mock } from 'jest-mock-extended'
 
 describe('FacebookAuthController', () => {
-    let sut: FacebookAuthController
+    let facebookAuth: MockProxy<FacebookAuth>
+    let sut: FacebookLoginController
+
+    beforeAll(() => {
+        facebookAuth = mock()
+    })
 
     beforeEach(() => {
-        sut = new FacebookAuthController()
+        sut = new FacebookLoginController(facebookAuth)
     })
 
     it('should return 400 if token is empty', async () => {
@@ -32,5 +40,11 @@ describe('FacebookAuthController', () => {
             statusCode: 400,
             data: new Error('Token is required!')
         })
+    })
+
+    it('should call FacebookAuth with correct params', async () => {
+        await sut.handle({ token: 'any_token' })
+
+        expect(facebookAuth.execute).toHaveBeenCalledWith({ token: 'any_token' })
     })
 })
