@@ -1,4 +1,5 @@
 import { FacebookLoginController } from '@/application/controllers'
+import { ServerError } from '@/application/errors'
 import { AuthenticatorError } from '@/domain/errors'
 import { FacebookAuth } from '@/domain/features'
 import { AccessToken } from '@/domain/models'
@@ -80,7 +81,7 @@ describe('FacebookAuthController', () => {
 
         expect(httpResponse).toEqual({
             statusCode: 500,
-            data: new Error('server error')
+            data: new ServerError(new Error('server error'))
         })
     })
 })

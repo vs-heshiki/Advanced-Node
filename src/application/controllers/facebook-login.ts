@@ -1,3 +1,4 @@
+import { serverError } from '@/application/helpers'
 import { FacebookAuth } from '@/domain/features'
 import { AccessToken } from '@/domain/models'
 
@@ -29,10 +30,7 @@ export class FacebookLoginController {
                 }
             }
         } catch (err) {
-            return {
-                statusCode: 500,
-                data: new Error('server error')
-            }
+            return serverError(err)
         }
     }
 }
