@@ -14,3 +14,8 @@ export const unauthorized = (): HttpResponse => ({
     statusCode: 401,
     data: new UnauthorizedError()
 })
+
+export const badRequest = (error: unknown): HttpResponse => ({
+    statusCode: 400,
+    data: error
+})

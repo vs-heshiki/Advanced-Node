@@ -1,4 +1,5 @@
-import { serverError, unauthorized } from '@/application/helpers'
+import { FieldRequiredError } from '@/application/errors'
+import { badRequest, serverError, unauthorized } from '@/application/helpers'
 import { FacebookAuth } from '@/domain/features'
 import { AccessToken } from '@/domain/models'
 
@@ -8,10 +9,7 @@ export class FacebookLoginController {
     async handle (httpRequest: any): Promise<httpResponse> {
         try {
             if (httpRequest.token === '' || httpRequest.token === undefined || httpRequest.token === null) {
-                return {
-                    statusCode: 400,
-                    data: new Error('Token is required!')
-                }
+                return badRequest(new FieldRequiredError('token'))
             }
 
             const resolve = await this.facebookAuth.execute({ token: httpRequest.token })
