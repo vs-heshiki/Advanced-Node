@@ -13,9 +13,9 @@ export class UnauthorizedError extends Error {
     }
 }
 
-export class FieldRequiredError extends Error {
-    constructor (field: string) {
-        super(`Field ${field} is required!`)
-        this.name = 'FieldRequiredError'
+export class RequiredInputError extends Error {
+    constructor (input: string) {
+        super(`Input ${input} is required!`)
+        this.name = 'RequiredInputError'
     }
 }

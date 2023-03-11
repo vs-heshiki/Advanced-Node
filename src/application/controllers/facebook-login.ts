@@ -1,5 +1,6 @@
-import { FieldRequiredError } from '@/application/errors'
+import { RequiredInputError } from '@/application/errors'
 import { HttpResponse, badRequest, serverError, success, unauthorized } from '@/application/helpers'
+import { RequiredInputValidator } from '@/application/validatior'
 import { FacebookAuth } from '@/domain/features'
 import { AccessToken } from '@/domain/models'
 
@@ -10,7 +11,7 @@ export class FacebookLoginController {
         try {
             const validate = this.validate(httpRequest)
             if (validate !== undefined) {
-                return badRequest(new FieldRequiredError('token'))
+                return badRequest(new RequiredInputError('token'))
             }
 
             const accessToken = await this.facebookAuth.execute({ token: httpRequest.token })
@@ -28,9 +29,8 @@ export class FacebookLoginController {
     }
 
     private validate (httpRequest: HttpRequest): unknown | undefined {
-        if (httpRequest.token === '' || httpRequest.token === undefined || httpRequest.token === null) {
-            return badRequest(new FieldRequiredError('token'))
-        }
+        const validator = new RequiredInputValidator(httpRequest.token, 'token')
+        return validator.validate()
     }
 }
 
