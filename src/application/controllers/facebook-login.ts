@@ -1,4 +1,4 @@
-import { serverError } from '@/application/helpers'
+import { serverError, unauthorized } from '@/application/helpers'
 import { FacebookAuth } from '@/domain/features'
 import { AccessToken } from '@/domain/models'
 
@@ -24,10 +24,7 @@ export class FacebookLoginController {
                     }
                 }
             } else {
-                return {
-                    statusCode: 401,
-                    data: resolve
-                }
+                return unauthorized()
             }
         } catch (err) {
             return serverError(err)
