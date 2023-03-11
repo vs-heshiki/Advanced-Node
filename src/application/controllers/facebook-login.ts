@@ -4,11 +4,18 @@ export class FacebookLoginController {
     constructor (private readonly facebookAuth: FacebookAuth) { }
 
     async handle (httpRequest: any): Promise<httpResponse> {
-        await this.facebookAuth.execute({ token: httpRequest.token })
+        if (httpRequest.token === '' || httpRequest.token === undefined || httpRequest.token === null) {
+            return {
+                statusCode: 400,
+                data: new Error('Token is required!')
+            }
+        }
+
+        const resolve = await this.facebookAuth.execute({ token: httpRequest.token })
 
         return {
-            statusCode: 400,
-            data: new Error('Token is required!')
+            statusCode: 401,
+            data: resolve
         }
     }
 }
