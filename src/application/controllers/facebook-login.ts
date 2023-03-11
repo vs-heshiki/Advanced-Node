@@ -8,7 +8,8 @@ export class FacebookLoginController {
 
     async handle (httpRequest: HttpRequest): Promise<HttpResponse<Model>> {
         try {
-            if (httpRequest.token === '' || httpRequest.token === undefined || httpRequest.token === null) {
+            const validate = this.validate(httpRequest)
+            if (validate !== undefined) {
                 return badRequest(new FieldRequiredError('token'))
             }
 
@@ -25,6 +26,12 @@ export class FacebookLoginController {
             return serverError(err)
         }
     }
+
+    private validate (httpRequest: HttpRequest): unknown | undefined {
+        if (httpRequest.token === '' || httpRequest.token === undefined || httpRequest.token === null) {
+            return badRequest(new FieldRequiredError('token'))
+        }
+    }
 }
 
 type Model = unknown | {
@@ -32,5 +39,5 @@ type Model = unknown | {
 }
 
 type HttpRequest = {
-    token: string | undefined | null
+    token: string
 }
