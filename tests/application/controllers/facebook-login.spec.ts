@@ -72,4 +72,15 @@ describe('FacebookAuthController', () => {
             }
         })
     })
+
+    it('should return 500 if authenticator throws', async () => {
+        facebookAuth.execute.mockRejectedValueOnce(new Error('server error'))
+
+        const httpResponse = await sut.handle({ token: 'any_token' })
+
+        expect(httpResponse).toEqual({
+            statusCode: 500,
+            data: new Error('server error')
+        })
+    })
 })
