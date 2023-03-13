@@ -1,6 +1,5 @@
-import { RequiredInputError } from '@/application/errors'
 import { HttpResponse, badRequest, serverError, success, unauthorized } from '@/application/helpers'
-import { RequiredInputValidator } from '@/application/validatior'
+import { RequiredInputValidator } from '@/application/validator'
 import { FacebookAuth } from '@/domain/features'
 import { AccessToken } from '@/domain/models'
 
@@ -9,9 +8,9 @@ export class FacebookLoginController {
 
     async handle (httpRequest: HttpRequest): Promise<HttpResponse<Model>> {
         try {
-            const validate = this.validate(httpRequest)
-            if (validate !== undefined) {
-                return badRequest(new RequiredInputError('token'))
+            const error = this.validate(httpRequest)
+            if (error !== undefined) {
+                return badRequest(error)
             }
 
             const accessToken = await this.facebookAuth.execute({ token: httpRequest.token })
