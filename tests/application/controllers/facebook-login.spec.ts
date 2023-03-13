@@ -1,13 +1,13 @@
 import { FacebookLoginController } from '@/application/controllers'
 import { ServerError, UnauthorizedError } from '@/application/errors'
-import { RequiredInputValidator } from '@/application/validator'
+import { RequiredInputValidator } from '@/application/validation/validators'
 import { AuthenticatorError } from '@/domain/errors'
 import { FacebookAuth } from '@/domain/features'
 import { AccessToken } from '@/domain/models'
 
 import { MockProxy, mock } from 'jest-mock-extended'
 
-jest.mock('@/application/validator/required-input')
+jest.mock('@/application/validation/validators/required-input')
 
 describe('FacebookAuthController', () => {
     let facebookAuth: MockProxy<FacebookAuth>

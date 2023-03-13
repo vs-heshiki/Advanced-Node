@@ -1,5 +1,5 @@
 import { HttpResponse, badRequest, serverError, success, unauthorized } from '@/application/helpers'
-import { RequiredInputValidator } from '@/application/validator'
+import { RequiredInputValidator } from '@/application/validation/validators'
 import { FacebookAuth } from '@/domain/features'
 import { AccessToken } from '@/domain/models'
 

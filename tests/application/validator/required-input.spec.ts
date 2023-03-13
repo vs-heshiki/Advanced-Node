@@ -1,5 +1,5 @@
 import { RequiredInputError } from '@/application/errors'
-import { RequiredInputValidator } from '@/application/validator'
+import { RequiredInputValidator } from '@/application/validation/validators'
 
 describe('RequiredInputValidator', () => {
     it('should return a RequiredInputError if value is empty', () => {
