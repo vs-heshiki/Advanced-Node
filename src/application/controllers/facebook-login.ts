@@ -1,4 +1,5 @@
 import { HttpResponse, badRequest, serverError, success, unauthorized } from '@/application/helpers'
+import { ValidatorComposite } from '@/application/validation'
 import { RequiredInputValidator } from '@/application/validation/validators'
 import { FacebookAuth } from '@/domain/features'
 import { AccessToken } from '@/domain/models'
@@ -28,8 +29,9 @@ export class FacebookLoginController {
     }
 
     private validate (httpRequest: HttpRequest): unknown | undefined {
-        const validator = new RequiredInputValidator(httpRequest.token, 'token')
-        return validator.validate()
+        return new ValidatorComposite([
+            new RequiredInputValidator(httpRequest.token, 'token')
+        ]).validate()
     }
 }
 
