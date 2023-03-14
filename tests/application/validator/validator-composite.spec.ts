@@ -21,9 +21,17 @@ describe('ValidatorComposite', () => {
     })
 
     it('should return undefined if all validators return undefined', () => {
-        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
         const error = sut.validate()
 
         expect(error).toBeUndefined()
+    })
+
+    it('should return the first error', () => {
+        validator1.validate.mockReturnValueOnce(new Error('first_validator_error'))
+        validator2.validate.mockReturnValueOnce(new Error('second_validator_error'))
+
+        const error = sut.validate()
+
+        expect(error).toEqual(new Error('first_validator_error'))
     })
 })
