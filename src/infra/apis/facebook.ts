@@ -27,22 +27,20 @@ export class FacebookApi implements LoadFacebookUser {
     ) { }
 
     async loadUser (params: LoadFacebookUser.Params): Promise<LoadFacebookUser.Resolve> {
-        const userInfo = await this.getUserInfo(params.token)
-
-        return {
-            name: userInfo.name,
-            email: userInfo.email,
-            facebookId: userInfo.id
-        }
+        return await this.getUserInfo(params.token).then(({ name, email, id }) => ({
+            name,
+            email,
+            facebookId: id
+        })).catch(() => (undefined))
     }
 
     private async getAppToken (): Promise<AppToken> {
         return await this.httpClient.get({
             url: `${this.baseUrl}/oauth/access_token`,
             params: {
-                clientId: this.clientId,
-                clientSecret: this.clientSecret,
-                grantType: 'client_credentials'
+                client_id: this.clientId,
+                client_secret: this.clientSecret,
+                grant_type: 'client_credentials'
             }
         })
     }
@@ -52,8 +50,8 @@ export class FacebookApi implements LoadFacebookUser {
         return await this.httpClient.get({
             url: `${this.baseUrl}/debug_token`,
             params: {
-                accessToken: appToken.accessToken,
-                inputToken: clientToken
+                access_token: appToken.accessToken,
+                input_token: clientToken
             }
         })
     }
@@ -64,7 +62,7 @@ export class FacebookApi implements LoadFacebookUser {
             url: `${this.baseUrl}/${debugToken.data.userId}`,
             params: {
                 fields: ['id', 'name', 'email'].join(','),
-                accessToken: clientToken
+                access_token: clientToken
             }
         })
     }

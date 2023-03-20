@@ -31,9 +31,9 @@ describe('FacebookApi', () => {
         expect(httpClient.get).toHaveBeenCalledWith({
             url: 'https://graph.facebook.com/oauth/access_token',
             params: {
-                clientId: 'any_client_id',
-                clientSecret: 'any_client_secret',
-                grantType: 'client_credentials'
+                client_id: 'any_client_id',
+                client_secret: 'any_client_secret',
+                grant_type: 'client_credentials'
             }
         })
     })
@@ -44,8 +44,8 @@ describe('FacebookApi', () => {
         expect(httpClient.get).toHaveBeenCalledWith({
             url: 'https://graph.facebook.com/debug_token',
             params: {
-                accessToken: 'any_app_token',
-                inputToken: 'any_client_token'
+                access_token: 'any_app_token',
+                input_token: 'any_client_token'
             }
         })
     })
@@ -57,7 +57,7 @@ describe('FacebookApi', () => {
             url: 'https://graph.facebook.com/any_user_id',
             params: {
                 fields: 'id,name,email',
-                accessToken: 'any_client_token'
+                access_token: 'any_client_token'
             }
         })
     })
@@ -70,5 +70,13 @@ describe('FacebookApi', () => {
             email: 'any_fb_email',
             facebookId: 'any_fb_id'
         })
+    })
+
+    it('should return undefined if HttpGetClient throws', async () => {
+        httpClient.get.mockReset().mockRejectedValueOnce(new Error('facebook_error'))
+
+        const facebookUser = await sut.loadUser({ token: 'any_client_token' })
+
+        expect(facebookUser).toBeUndefined()
     })
 })
