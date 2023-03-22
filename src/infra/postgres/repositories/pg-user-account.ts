@@ -3,12 +3,17 @@ import { LoadUserAccountRepository, SaveUserFacebookRepository } from '@/data/co
 
 import { DataSource } from 'typeorm'
 
+type LoadParams = LoadUserAccountRepository.Params
+type LoadResolve = LoadUserAccountRepository.Resolve
+type SaveParams = SaveUserFacebookRepository.Params
+type SaveResolve = SaveUserFacebookRepository.Resolve
+
 export class PgUserAccountRepository implements LoadUserAccountRepository, SaveUserFacebookRepository {
     constructor (private readonly dataSource: DataSource) { }
 
-    async load (params: LoadUserAccountRepository.Params): Promise<LoadUserAccountRepository.Resolve> {
+    async load ({ email }: LoadParams): Promise<LoadResolve> {
         const pgUserAccount = this.dataSource.getRepository(PgUser)
-        const pgUser = await pgUserAccount.findOne({ where: { email: params.email } })
+        const pgUser = await pgUserAccount.findOne({ where: { email } })
         if (pgUser?.id !== undefined) {
             return {
                 id: pgUser?.id.toString(),
@@ -17,25 +22,16 @@ export class PgUserAccountRepository implements LoadUserAccountRepository, SaveU
         }
     }
 
-    async saveWithFacebook (params: SaveUserFacebookRepository.Params): Promise<SaveUserFacebookRepository.Resolve> {
+    async saveWithFacebook ({ email, name, facebookId, id }: SaveParams): Promise<SaveResolve> {
         const pgUserAccount = this.dataSource.getRepository(PgUser)
-        let id: string
-        if (params.id === undefined) {
-            const pgUser = await pgUserAccount.save({
-                email: params.email,
-                name: params.name,
-                facebookId: params.facebookId
-            })
-            id = pgUser.id.toString()
+        let resultId: string
+        if (id === undefined) {
+            const pgUser = await pgUserAccount.save({ email, name, facebookId })
+            resultId = pgUser.id.toString()
         } else {
-            id = params.id
-            await pgUserAccount.update({
-                id: parseInt(params.id)
-            }, {
-                name: params.name,
-                facebookId: params.facebookId
-            })
+            resultId = id
+            await pgUserAccount.update({ id: parseInt(id) }, { name, facebookId })
         }
-        return { id }
+        return { id: resultId }
     }
 }

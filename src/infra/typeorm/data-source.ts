@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm'
 import env from '@/main/config/env'
 
-const dataSource = new DataSource({
+export const dataSource = new DataSource({
     type: 'postgres',
     host: 'localhost',
     port: 5432,
@@ -14,13 +14,3 @@ const dataSource = new DataSource({
     subscribers: [],
     migrations: []
 })
-
-dataSource.initialize()
-    .then(() => {
-        console.log('connect with database!')
-    })
-    .catch((error) => {
-        console.log(error)
-    })
-
-export { dataSource }

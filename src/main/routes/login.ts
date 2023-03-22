@@ -4,5 +4,5 @@ import { Router } from 'express'
 
 export default (router: Router): void => {
     const adapter = adapt(fbLoginController())
-    router.post('/facebook-login', adapter)
+    router.post('/login/facebook', adapter)
 }
