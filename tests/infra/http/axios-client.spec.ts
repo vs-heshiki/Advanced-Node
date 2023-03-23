@@ -7,12 +7,14 @@ jest.mock('axios')
 describe('AxiosHttpClient', () => {
     let mockAxios: jest.Mocked<typeof axios>
     let sut: AxiosHttpClient
-    const url: string = 'any_url'
-    const params: object = { any: 'any' }
+    let url: string
+    let params: object
 
     beforeAll(() => {
+        url = 'any_url'
+        params = { any: 'any' }
         mockAxios = axios as jest.Mocked<typeof axios>
-        mockAxios.get.mockResolvedValue({ data: { any: 'data' }, status: 200 })
+        mockAxios.get.mockResolvedValue({ data: 'any_data', status: 200 })
     })
 
     beforeEach(() => {
@@ -28,7 +30,7 @@ describe('AxiosHttpClient', () => {
     it('should return data on success', async () => {
         const data = await sut.get({ url, params })
 
-        expect(data).toEqual({ data: { any: 'data' }, status: 200 })
+        expect(data).toEqual('any_data')
     })
 
     it('should throw if axios.GET throws', async () => {

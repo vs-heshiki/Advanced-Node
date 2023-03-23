@@ -6,7 +6,8 @@ type Params = HttpGetClient.Params
 type Resolve = HttpGetClient.Resolve
 
 export class AxiosHttpClient implements HttpGetClient {
-    async get ({ params, url }: Params): Promise<Resolve> {
-        return await axios.get(url, { params })
+    async get ({ url, params }: Params): Promise<Resolve> {
+        const resolve = await axios.get(url, { params })
+        return resolve.data
     }
 }

@@ -2,12 +2,12 @@ import { HttpGetClient } from '@/infra/http'
 import { LoadFacebookUser } from '@/data/contracts/apis'
 
 type AppToken = {
-    accessToken: string
+    access_token: string
 }
 
 type DebugToken = {
     data: {
-        userId: string
+        user_id: string
     }
 }
 
@@ -21,7 +21,7 @@ type Params = LoadFacebookUser.Params
 type Resolve = LoadFacebookUser.Resolve
 
 export class FacebookApi implements LoadFacebookUser {
-    private readonly baseUrl = 'https://graph.facebook.com'
+    private readonly baseUrl = 'https://graph.facebook.com/v16.0'
 
     constructor (
         private readonly httpClient: HttpGetClient,
@@ -46,24 +46,24 @@ export class FacebookApi implements LoadFacebookUser {
         })
     }
 
-    private async getDebugToken (clientToken: string): Promise<DebugToken> {
+    private async getDebugToken (token: string): Promise<DebugToken> {
         const appToken = await this.getAppToken()
         return await this.httpClient.get({
             url: `${this.baseUrl}/debug_token`,
             params: {
-                access_token: appToken.accessToken,
-                input_token: clientToken
+                input_token: token,
+                access_token: appToken.access_token
             }
         })
     }
 
-    private async getUserInfo (clientToken: string): Promise<UserInfo> {
-        const debugToken = await this.getDebugToken(clientToken)
+    private async getUserInfo (token: string): Promise<UserInfo> {
+        const debugToken = await this.getDebugToken(token)
         return await this.httpClient.get({
-            url: `${this.baseUrl}/${debugToken.data.userId}`,
+            url: `${this.baseUrl}/${debugToken.data.user_id}`,
             params: {
                 fields: ['id', 'name', 'email'].join(','),
-                access_token: clientToken
+                access_token: token
             }
         })
     }
