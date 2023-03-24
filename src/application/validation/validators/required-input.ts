@@ -6,7 +6,7 @@ export class RequiredInputValidator {
         private readonly input: string
     ) { }
 
-    validate (): unknown | undefined {
+    validate (): Error | undefined {
         if (this.value === '' || this.value === undefined || this.value === null) {
             return new RequiredInputError(this.input)
         }

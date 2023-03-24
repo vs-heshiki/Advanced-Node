@@ -9,7 +9,7 @@ export class FacebookLoginController extends Controller {
         super()
     }
 
-    async execute ({ token }: any): Promise<HttpResponse<Model>> {
+    async execute ({ token }: HttpRequest): Promise<HttpResponse<Model>> {
         const accessToken = await this.facebookAuth.execute({ token })
 
         return accessToken instanceof AccessToken
@@ -24,7 +24,7 @@ export class FacebookLoginController extends Controller {
     }
 }
 
-type Model = unknown | {
+type Model = Error | {
     accessToken: string
 }
 

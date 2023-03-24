@@ -1,3 +1,3 @@
 export interface Validator {
-    validate: () => unknown | undefined
+    validate: () => Error | undefined
 }

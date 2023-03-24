@@ -51,6 +51,17 @@ describe('Controller', () => {
         })
     })
 
+    it('should return 500 if execute throws a non error object', async () => {
+        jest.spyOn(sut, 'execute').mockRejectedValueOnce('error')
+
+        const httpResponse = await sut.handle('any_value')
+
+        expect(httpResponse).toEqual({
+            statusCode: 500,
+            data: new ServerError()
+        })
+    })
+
     it('should return 200 on success', async () => {
         const httpResponse = await sut.handle('any_value')
 

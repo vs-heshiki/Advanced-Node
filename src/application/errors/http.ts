@@ -1,8 +1,8 @@
 export class ServerError extends Error {
-    constructor (error?: unknown) {
+    constructor (error?: Error) {
         super('Something went wrong! Try again later :(')
         this.name = 'ServerError'
-        this.stack = error as string
+        this.stack = error?.stack
     }
 }
 

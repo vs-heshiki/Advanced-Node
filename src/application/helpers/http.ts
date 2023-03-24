@@ -10,17 +10,17 @@ export const success = <T = any> (data: T): HttpResponse<T> => ({
     data
 })
 
-export const serverError = (error: unknown): HttpResponse<unknown> => ({
+export const serverError = (error: unknown): HttpResponse<Error> => ({
     statusCode: 500,
-    data: new ServerError(error)
+    data: new ServerError(error instanceof Error ? error : undefined)
 })
 
-export const unauthorized = (): HttpResponse<unknown> => ({
+export const unauthorized = (): HttpResponse<Error> => ({
     statusCode: 401,
     data: new UnauthorizedError()
 })
 
-export const badRequest = (error: unknown): HttpResponse<unknown> => ({
+export const badRequest = (error: Error): HttpResponse<Error> => ({
     statusCode: 400,
     data: error
 })

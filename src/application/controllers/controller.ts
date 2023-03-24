@@ -21,7 +21,7 @@ export abstract class Controller {
         }
     }
 
-    private validate (httpRequest: any): unknown | undefined {
+    private validate (httpRequest: any): Error | undefined {
         const validators = this.validatorBuilder(httpRequest)
         return new ValidatorComposite(validators).validate()
     }
