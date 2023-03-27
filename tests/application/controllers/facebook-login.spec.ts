@@ -1,7 +1,7 @@
 import { FacebookLoginController } from '@/application/controllers'
 import { UnauthorizedError } from '@/application/errors'
 import { RequiredInputValidator } from '@/application/validation/validators'
-import { AuthenticatorError } from '@/domain/errors'
+import { AuthenticatorError } from '@/domain/services/errors'
 import { FacebookAuth } from '@/domain/features'
 import { AccessToken } from '@/domain/models'
 

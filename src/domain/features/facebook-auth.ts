@@ -1,4 +1,4 @@
-import { AuthenticatorError } from '@/domain/errors'
+import { AuthenticatorError } from '@/domain/services/errors'
 import { AccessToken } from '@/domain/models'
 
 export interface FacebookAuth {
