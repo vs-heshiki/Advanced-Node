@@ -10,7 +10,7 @@ export const dataSource = new DataSource({
     database: 'Facebook',
     synchronize: true,
     logging: true,
-    entities: ['@/infra/postgres/entities/'],
+    entities: ['src/infra/postgres/entities/index.{js,ts}'],
     subscribers: [],
     migrations: []
 })
