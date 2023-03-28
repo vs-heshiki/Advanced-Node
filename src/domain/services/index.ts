@@ -1,1 +1,1 @@
-export * from './facebook-auth-service'
+export * from './facebook-auth'
