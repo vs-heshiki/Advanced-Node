@@ -1,16 +1,15 @@
-import { DataSource } from 'typeorm'
-import env from '@/main/configs/env'
+import { PgUser } from '@/infra/postgres/entities'
+import { DataSource, DataSourceOptions } from 'typeorm'
 
-export const dataSource = new DataSource({
+const options: DataSourceOptions = {
     type: 'postgres',
     host: 'localhost',
     port: 5432,
     username: 'postgres',
-    password: env.PG_PASSWORD,
-    database: 'Facebook',
+    password: 'qwer',
+    database: 'postgres',
     synchronize: true,
-    logging: true,
-    entities: ['src/infra/postgres/entities/index.{js,ts}'],
-    subscribers: [],
-    migrations: []
-})
+    entities: [PgUser]
+}
+
+export const dataSource: DataSource = new DataSource(options)

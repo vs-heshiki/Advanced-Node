@@ -1,1 +1,1 @@
-export * from './pg-user'
+export * from './pg-user.entity'
