@@ -1,8 +1,8 @@
 import 'reflect-metadata'
-import './config/module-alias'
+import './configs/module-alias'
 
-import { app } from '@/main/config/app'
-import env from '@/main/config/env'
+import { app } from '@/main/configs/app'
+import env from '@/main/configs/env'
 
 app.listen(env.PORT, () => {
     console.log(`Listening in ${env.PORT} port`)

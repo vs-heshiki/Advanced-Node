@@ -1,6 +1,6 @@
 import { FacebookApi } from '@/infra/apis'
 import { AxiosHttpClient } from '@/infra/http'
-import sensive_env from '@/main/config/sens-env'
+import sensive_env from '@/main/configs/sens-env'
 
 describe('FacebookApi Integration Tests', () => {
     it('should return undefined if token is invalid', async () => {
