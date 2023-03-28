@@ -1,13 +1,13 @@
 import { FacebookAuth, FacebookAuthSetup } from '@/domain/services'
-import { AuthenticatorError } from '@/domain/services/errors'
+import { AuthenticatorError } from '@/domain/entities/errors'
 import { LoadFacebookUser } from '@/domain/contracts/apis'
 import { LoadUserAccountRepository, SaveUserFacebookRepository } from '@/domain/contracts/repositories'
-import { AccessToken, FacebookAccount } from '@/domain/models'
+import { AccessToken, FacebookAccount } from '@/domain/entities'
 import { TokenGenerator } from '@/domain/contracts/crypto'
 
 import { mock, MockProxy } from 'jest-mock-extended'
 
-jest.mock('@/domain/models/facebook-account')
+jest.mock('@/domain/entities/facebook-account')
 
 describe('FacebookAuth Service', () => {
     let facebookApi: MockProxy<LoadFacebookUser>
@@ -47,12 +47,12 @@ describe('FacebookAuth Service', () => {
         expect(facebookApi.loadUser).toHaveBeenCalledTimes(1)
     })
 
-    it('should return AuthenticatiorError if LoadFacebookUser returns undefined', async () => {
+    it('should throw AuthenticatorError if LoadFacebookUser returns undefined', async () => {
         facebookApi.loadUser.mockResolvedValueOnce(undefined)
 
-        const result = await sut({ token })
+        const result = sut({ token })
 
-        expect(result).toEqual(new AuthenticatorError())
+        await expect(result).rejects.toThrow(new AuthenticatorError())
     })
 
     it('should call UserAccountRepository if LoadFacebookUser returns data', async () => {
@@ -85,7 +85,7 @@ describe('FacebookAuth Service', () => {
     it('should return a AccessToken on success', async () => {
         const accessToken = await sut({ token })
 
-        expect(accessToken).toEqual(new AccessToken('any_access_token'))
+        expect(accessToken).toEqual({ accessToken: 'any_access_token' })
     })
 
     it('should throw if LoadFacebookUser throws', async () => {
