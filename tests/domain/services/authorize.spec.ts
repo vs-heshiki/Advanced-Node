@@ -28,4 +28,12 @@ describe('Authorize Service', () => {
 
         expect(userId).toBe('any_id')
     })
+
+    it('should throw if TokenValidator fails', async () => {
+        crypto.validate.mockRejectedValueOnce(new Error('validation_failed'))
+
+        const promise = sut({ token })
+
+        await expect(promise).rejects.toThrow()
+    })
 })
