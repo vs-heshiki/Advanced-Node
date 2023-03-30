@@ -7,12 +7,11 @@ describe('Authorize Service', () => {
 
     beforeAll(() => {
         crypto = mock()
+        crypto.validate.mockResolvedValue('any_id')
     })
 
     beforeEach(() => {
-        sut = AuthorizeSetup(
-            crypto
-        )
+        sut = AuthorizeSetup(crypto)
     })
 
     it('should call TokenValidator with correct param', async () => {
@@ -21,20 +20,28 @@ describe('Authorize Service', () => {
         expect(crypto.validate).toHaveBeenCalledWith({ token })
         expect(crypto.validate).toHaveBeenCalledTimes(1)
     })
+
+    it('should return a UserId on success', async () => {
+        const userId = await sut({ token })
+
+        expect(userId).toBe('any_id')
+    })
 })
 
 export interface TokenValidator {
-    validate: (params: TokenValidator.Params) => Promise<void>
+    validate: (params: TokenValidator.Input) => Promise<TokenValidator.Output>
 }
 
 export namespace TokenValidator {
-    export type Params = { token: string }
+    export type Input = { token: string }
+    export type Output = string
 }
 
-type Authorize = (params: { token: string }) => Promise<void>
-
-export type Setup = (crypto: TokenValidator) => Authorize
+type Setup = (crypto: TokenValidator) => Authorize
+type Input = { token: string }
+type Output = string
+export type Authorize = (params: Input) => Promise<Output>
 
 const AuthorizeSetup: Setup = (crypto) => async params => {
-    await crypto.validate(params)
+    return await crypto.validate(params)
 }
