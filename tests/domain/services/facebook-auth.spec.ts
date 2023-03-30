@@ -29,7 +29,7 @@ describe('FacebookAuth Service', () => {
         userAccountRepository.saveWithFacebook.mockResolvedValue({ id: 'any_id' })
 
         crypto = mock()
-        crypto.genToken.mockResolvedValue('any_access_token')
+        crypto.generator.mockResolvedValue('any_access_token')
     })
 
     beforeEach(() => {
@@ -75,11 +75,11 @@ describe('FacebookAuth Service', () => {
     it('should call TokenGenerator with correct values', async () => {
         await sut({ token })
 
-        expect(crypto.genToken).toHaveBeenCalledWith({
+        expect(crypto.generator).toHaveBeenCalledWith({
             key: 'any_id',
             expiresInMs: AccessToken.expiresInMs
         })
-        expect(crypto.genToken).toHaveBeenCalledTimes(1)
+        expect(crypto.generator).toHaveBeenCalledTimes(1)
     })
 
     it('should return a AccessToken on success', async () => {
@@ -113,7 +113,7 @@ describe('FacebookAuth Service', () => {
     })
 
     it('should throw if TokenGenerator throws', async () => {
-        crypto.genToken.mockRejectedValueOnce(new Error('server error'))
+        crypto.generator.mockRejectedValueOnce(new Error('server error'))
 
         const result = sut({ token })
 

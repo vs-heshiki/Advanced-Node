@@ -21,7 +21,7 @@ export const FacebookAuthSetup: Setup = (facebookApi, userAccountRepository, cry
         const accountData = await userAccountRepository.load({ email: facebookData.email })
         const facebookAccount = new FacebookAccount(facebookData, accountData)
         const { id } = await userAccountRepository.saveWithFacebook(facebookAccount)
-        const accessToken = await crypto.genToken({ key: id, expiresInMs: AccessToken.expiresInMs })
+        const accessToken = await crypto.generator({ key: id, expiresInMs: AccessToken.expiresInMs })
         return { accessToken }
     }
     throw new AuthenticatorError()
