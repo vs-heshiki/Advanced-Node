@@ -3,10 +3,10 @@ import { LoadUserAccountRepository, SaveUserFacebookRepository } from '@/domain/
 
 import { DataSource } from 'typeorm'
 
-type LoadParams = LoadUserAccountRepository.Params
-type LoadResolve = LoadUserAccountRepository.Resolve
-type SaveParams = SaveUserFacebookRepository.Params
-type SaveResolve = SaveUserFacebookRepository.Resolve
+type LoadParams = LoadUserAccountRepository.Input
+type LoadResolve = LoadUserAccountRepository.Output
+type SaveParams = SaveUserFacebookRepository.Input
+type SaveResolve = SaveUserFacebookRepository.Output
 
 export class PgUserAccountRepository implements LoadUserAccountRepository, SaveUserFacebookRepository {
     constructor (private readonly dataSource: DataSource) { }

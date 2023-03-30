@@ -1,12 +1,12 @@
 export interface HttpGetClient {
-    get: (params: HttpGetClient.Params) => Promise<HttpGetClient.Resolve>
+    get: (params: HttpGetClient.Input) => Promise<HttpGetClient.Output>
 }
 
 export namespace HttpGetClient {
-    export type Params = {
+    export type Input = {
         url: string
         params: object
     }
 
-    export type Resolve<T = any> = T
+    export type Output<T = any> = T
 }

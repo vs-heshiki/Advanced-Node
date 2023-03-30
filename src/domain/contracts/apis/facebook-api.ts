@@ -1,13 +1,13 @@
 export interface LoadFacebookUser {
-    loadUser: (params: LoadFacebookUser.Params) => Promise<LoadFacebookUser.Resolve>
+    loadUser: (params: LoadFacebookUser.Input) => Promise<LoadFacebookUser.Output>
 }
 
 export namespace LoadFacebookUser {
-    export type Params = {
+    export type Input = {
         token: string
     }
 
-    export type Resolve = undefined | {
+    export type Output = undefined | {
         name: string
         email: string
         facebookId: string
