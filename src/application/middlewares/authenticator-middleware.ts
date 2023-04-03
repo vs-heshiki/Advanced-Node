@@ -9,11 +9,17 @@ export class AuthenticatorMiddleware {
     constructor (private readonly authorize: Authorize) { }
 
     async handle ({ authorization }: HttpRequest): Promise<HttpResponse<Output>> {
-        const validate = new RequiredInputValidator(authorization, 'authorization').validate()
-        if (validate !== undefined) return forbidden()
+        if (!this.validate({ authorization })) return forbidden()
         try {
             const userId = await this.authorize({ token: authorization })
             return success({ userId })
-        } catch { return forbidden() }
+        } catch {
+            return forbidden()
+        }
+    }
+
+    private validate ({ authorization }: HttpRequest): boolean {
+        const error = new RequiredInputValidator(authorization, 'authorization').validate()
+        return error === undefined
     }
 }
