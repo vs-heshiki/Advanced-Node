@@ -59,6 +59,17 @@ describe('Authenticator Middleware', () => {
         expect(authorize).toHaveBeenCalledWith({ token: authorization })
         expect(authorize).toHaveBeenCalledTimes(1)
     })
+
+    it('should return 403 if authorize throws', async () => {
+        authorize.mockRejectedValueOnce(new Error('any_error'))
+
+        const response = await sut.handle({ authorization })
+
+        expect(response).toEqual({
+            statusCode: 403,
+            data: new ForbiddenError()
+        })
+    })
 })
 
 type HttpRequest = { authorization: string }
@@ -69,6 +80,6 @@ export class AuthenticatorMiddleware {
     async handle ({ authorization }: HttpRequest): Promise<HttpResponse<Error> | undefined> {
         const validate = new RequiredInputValidator(authorization, 'authorization').validate()
         if (validate !== undefined) return forbidden()
-        await this.authorize({ token: authorization })
+        try { await this.authorize({ token: authorization }) } catch { return forbidden() }
     }
 }
