@@ -1,5 +1,5 @@
 import { ForbiddenError } from '@/application/errors'
-import { HttpResponse, forbidden } from '@/application/helpers'
+import { HttpResponse, forbidden, success } from '@/application/helpers'
 import { RequiredInputValidator } from '@/application/validation/validators'
 import { Authorize } from '@/domain/services'
 
@@ -9,8 +9,8 @@ describe('Authenticator Middleware', () => {
     let authorization: string
 
     beforeAll(() => {
-        authorize = jest.fn()
         authorization = 'any_authorization_token'
+        authorize = jest.fn().mockResolvedValue('any_user_id')
     })
 
     beforeEach(() => {
@@ -70,16 +70,29 @@ describe('Authenticator Middleware', () => {
             data: new ForbiddenError()
         })
     })
+
+    it('should return 200 and user id on success', async () => {
+        const authToken = await sut.handle({ authorization })
+
+        expect(authToken).toEqual({
+            statusCode: 200,
+            data: { userId: 'any_user_id' }
+        })
+    })
 })
 
 type HttpRequest = { authorization: string }
+type Output = Error | { userId: string }
 
 export class AuthenticatorMiddleware {
     constructor (private readonly authorize: Authorize) { }
 
-    async handle ({ authorization }: HttpRequest): Promise<HttpResponse<Error> | undefined> {
+    async handle ({ authorization }: HttpRequest): Promise<HttpResponse<Output>> {
         const validate = new RequiredInputValidator(authorization, 'authorization').validate()
         if (validate !== undefined) return forbidden()
-        try { await this.authorize({ token: authorization }) } catch { return forbidden() }
+        try {
+            const userId = await this.authorize({ token: authorization })
+            return success({ userId })
+        } catch { return forbidden() }
     }
 }
