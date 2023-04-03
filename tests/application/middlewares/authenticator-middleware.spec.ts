@@ -16,6 +16,15 @@ describe('Authenticator Middleware', () => {
             data: new ForbiddenError()
         })
     })
+
+    it('should return 403 if authorization is null', async () => {
+        const response = await sut.handle({ authorization: null as any })
+
+        expect(response).toEqual({
+            statusCode: 403,
+            data: new ForbiddenError()
+        })
+    })
 })
 
 type HttpRequest = { authorization: string }
