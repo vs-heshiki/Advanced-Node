@@ -14,7 +14,7 @@ describe('ExpressRouter', () => {
     let controller: MockProxy<Controller>
     let sut: RequestHandler
 
-    beforeEach(() => {
+    beforeAll(() => {
         req = getMockReq({ body: { any: 'any' } })
         res = getMockRes().res
         next = getMockRes().next
@@ -25,6 +25,9 @@ describe('ExpressRouter', () => {
                 any: 'any_data'
             }
         })
+    })
+
+    beforeEach(() => {
         sut = adaptExpressRouter(controller)
     })
 
