@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/await-thenable */
 /* eslint-disable @typescript-eslint/no-confusing-void-expression */
-import { HttpResponse } from '@/application/helpers'
+import { Middleware } from '@/application/controllers'
+import { adapterExpressMiddleware as adapt } from '@/main/adapters'
+
 import { getMockReq, getMockRes } from '@jest-mock/express'
 import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { MockProxy, mock } from 'jest-mock-extended'
@@ -29,7 +31,7 @@ describe('ExpressMiddleware', () => {
     })
 
     beforeEach(() => {
-        sut = adapterExpressMiddleware(middleware)
+        sut = adapt(middleware)
     })
 
     it('should call handle with correct request', async () => {
@@ -69,19 +71,3 @@ describe('ExpressMiddleware', () => {
         expect(next).toHaveBeenCalledTimes(1)
     })
 })
-
-interface Middleware {
-    handle: (httpRequest: any) => Promise<HttpResponse>
-}
-
-type Setup = (middleware: Middleware) => RequestHandler
-
-const adapterExpressMiddleware: Setup = middleware => async (req, res, next) => {
-    const { statusCode, data } = await middleware.handle({ ...req.headers })
-    if (statusCode === 200) {
-        const entries = Object.entries(data).filter(entry => entry[1])
-        req.locals = { ...req.locals, ...Object.fromEntries(entries) }
-        next()
-    }
-    res.status(statusCode).json(data)
-}
