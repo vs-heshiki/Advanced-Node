@@ -1,4 +1,4 @@
-import sensitive_env from '@/main/configs/sens-env'
+import sensitive_env from '@/main/configs/env'
 import { FacebookApi } from '@/infra/apis'
 import { newAxiosHttpClient } from '@/main/factories/gateways'
 

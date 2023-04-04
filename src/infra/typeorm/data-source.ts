@@ -1,15 +1,15 @@
 import { PgUser } from '@/infra/postgres/entities'
 import { DataSource, DataSourceOptions } from 'typeorm'
-import sensEnv from '@/main/configs/sens-env'
+import env from '@/main/configs/env'
 
 const options: DataSourceOptions = {
     type: 'postgres',
-    host: 'fanny.db.elephantsql.com',
-    url: sensEnv.URL,
+    host: env.HOST,
+    url: env.URL,
     port: 5432,
-    username: 'ycckelan',
-    password: sensEnv.PASSWORD_DB,
-    database: 'ycckelan',
+    username: env.USERNAME,
+    password: env.PASSWORD_DB,
+    database: env.DATABASE,
     synchronize: true,
     entities: [PgUser]
 }

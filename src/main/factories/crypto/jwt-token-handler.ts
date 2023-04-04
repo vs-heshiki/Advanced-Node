@@ -1,6 +1,6 @@
 import { JwtTokenHandler } from '@/infra/crypto'
-import sensEnv from '@/main/configs/sens-env'
+import env from '@/main/configs/env'
 
 export const newJwtTokenHandler = (): JwtTokenHandler => {
-    return new JwtTokenHandler(sensEnv.JWT_SECRET)
+    return new JwtTokenHandler(env.JWT_SECRET)
 }

@@ -1,4 +1,4 @@
-import sensEnv from '@/main/configs/sens-env'
+import env from '@/main/configs/env'
 import { app } from '@/main/configs/app'
 import { auth } from '@/main/middlewares'
 import { ForbiddenError } from '@/application/errors'
@@ -17,7 +17,7 @@ describe('Authenticator Middleware', () => {
     })
 
     it('should return 200 if authorize header valid is provider', async () => {
-        const authorization = sign({ key: 'any_user_id' }, sensEnv.JWT_SECRET)
+        const authorization = sign({ key: 'any_user_id' }, env.JWT_SECRET)
         app.get('/fake_route', auth, (req, res) => {
             res.json(req.locals)
         })
