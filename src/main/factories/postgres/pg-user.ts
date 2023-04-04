@@ -1,6 +1,6 @@
-import { PgUserAccountRepository } from '@/infra/postgres/repositories'
+import { PguserAccount } from '@/infra/postgres/repositories'
 import { dataSource } from '@/infra/typeorm'
 
-export const newPgUserAccountRepository = (): PgUserAccountRepository => {
-    return new PgUserAccountRepository(dataSource)
+export const newPguserAccount = (): PguserAccount => {
+    return new PguserAccount(dataSource)
 }

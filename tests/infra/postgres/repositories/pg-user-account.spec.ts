@@ -1,15 +1,15 @@
 import { PgUser } from '@/infra/postgres/entities'
-import { PgUserAccountRepository } from '@/infra/postgres/repositories'
+import { PguserAccount } from '@/infra/postgres/repositories'
 
 import { makeFakeDb } from '@/tests/infra/postgres/repositories/db-connection'
 
 import { DataSource, Repository } from 'typeorm'
 import { IBackup } from 'pg-mem'
 
-describe('PgUserAccountRepository', () => {
+describe('PguserAccount', () => {
     let pgUserRepo: Repository<PgUser>
     let dataSource: DataSource
-    let sut: PgUserAccountRepository
+    let sut: PguserAccount
     let backup: IBackup
 
     beforeAll(async () => {
@@ -22,7 +22,7 @@ describe('PgUserAccountRepository', () => {
 
     beforeEach(() => {
         backup.restore()
-        sut = new PgUserAccountRepository(dataSource)
+        sut = new PguserAccount(dataSource)
     })
 
     afterAll(async () => {

@@ -1,5 +1,5 @@
 import { AuthenticatorMiddleware } from '@/application/middlewares'
-import { newJwtTokenHandler } from '@/main/factories/crypto'
+import { newJwtTokenHandler } from '@/main/factories/gateways'
 
 export const newAuthenticatorMiddleware = (): AuthenticatorMiddleware => {
     const jwt = newJwtTokenHandler()

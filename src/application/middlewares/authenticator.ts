@@ -3,6 +3,7 @@ import { RequiredInputValidator } from '@/application/validation/validators'
 
 type HttpRequest = { authorization: string }
 type Output = Error | { userId: string }
+
 export type Authorize = (input: { token: string }) => Promise<string>
 
 export class AuthenticatorMiddleware {
