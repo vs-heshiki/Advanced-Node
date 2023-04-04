@@ -1,1 +1,1 @@
-export * from './facebook-login'
+export * from './authenticator-middleware'

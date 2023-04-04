@@ -1,7 +1,9 @@
-import { ForbiddenError } from '@/application/errors'
+import sensEnv from '@/main/configs/sens-env'
 import { app } from '@/main/configs/app'
 import { auth } from '@/main/middlewares'
+import { ForbiddenError } from '@/application/errors'
 
+import { sign } from 'jsonwebtoken'
 import request from 'supertest'
 
 describe('Authenticator Middleware', () => {
@@ -12,5 +14,19 @@ describe('Authenticator Middleware', () => {
 
         expect(statusCode).toBe(403)
         expect(body).toEqual({ error: new ForbiddenError().message })
+    })
+
+    it('should return 200 if authorize header valid is provider', async () => {
+        const authorization = sign({ key: 'any_user_id' }, sensEnv.JWT_SECRET)
+        app.get('/fake_route', auth, (req, res) => {
+            res.json(req.locals)
+        })
+
+        const { statusCode, body } = await request(app)
+            .get('/fake_route')
+            .set({ authorization })
+
+        expect(statusCode).toBe(200)
+        expect(body).toEqual({ userId: 'any_user_id' })
     })
 })
