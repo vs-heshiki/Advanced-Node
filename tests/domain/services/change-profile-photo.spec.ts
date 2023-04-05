@@ -28,4 +28,10 @@ describe('ChangeProfilePhoto Service', () => {
         expect(uploadFile.update).toHaveBeenCalledWith({ file, key: uuid })
         expect(uploadFile.update).toHaveBeenCalledTimes(1)
     })
+
+    it('should not call update if file is undefined', async () => {
+        await sut({ file: undefined, userId: 'any_id' })
+
+        expect(uploadFile.update).not.toHaveBeenCalled()
+    })
 })
