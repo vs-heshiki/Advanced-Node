@@ -6,8 +6,9 @@ type Input = { userId: string, file?: Buffer }
 export type ChangeProfilePhotoSetup = (input: Input) => Promise<void>
 
 export const ChangeProfilePhoto: Setup = (uploadFile, uuid, userProfile) => async ({ userId, file }) => {
+    let photoUrl: string | undefined
     if (file !== undefined) {
-        const photoUrl = await uploadFile.update({ file, key: uuid.generate({ key: userId }) })
-        await userProfile.savePhoto({ photoUrl })
+        photoUrl = await uploadFile.update({ file, key: uuid.generate({ key: userId }) })
     }
+    await userProfile.savePhoto({ photoUrl })
 }

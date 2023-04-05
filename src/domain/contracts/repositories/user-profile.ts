@@ -3,5 +3,5 @@ export interface UserProfile {
 }
 
 export namespace UserProfile {
-    export type Input = { photoUrl: string }
+    export type Input = { photoUrl?: string }
 }

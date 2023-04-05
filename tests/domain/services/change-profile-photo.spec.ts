@@ -45,4 +45,18 @@ describe('ChangeProfilePhoto Service', () => {
         expect(userProfile.savePhoto).toHaveBeenCalledWith({ photoUrl: 'any_url' })
         expect(userProfile.savePhoto).toHaveBeenCalledTimes(1)
     })
+
+    it('should call save photo with correct url', async () => {
+        await sut({ file, userId: 'any_id' })
+
+        expect(userProfile.savePhoto).toHaveBeenCalledWith({ photoUrl: 'any_url' })
+        expect(userProfile.savePhoto).toHaveBeenCalledTimes(1)
+    })
+
+    it('should call save photo with correct input if file is undefined', async () => {
+        await sut({ file: undefined, userId: 'any_id' })
+
+        expect(userProfile.savePhoto).toHaveBeenCalledWith({ photoUrl: undefined })
+        expect(userProfile.savePhoto).toHaveBeenCalledTimes(1)
+    })
 })
