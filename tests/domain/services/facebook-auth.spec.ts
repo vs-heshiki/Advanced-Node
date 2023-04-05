@@ -12,7 +12,7 @@ describe('FacebookAuth Service', () => {
     let facebookApi: MockProxy<LoadFacebookUser>
     let crypto: MockProxy<TokenGenerator>
     let userAccount: MockProxy<LoadUserAccount & SaveUserFacebook>
-    let sut: FacebookAuth
+    let sut: FacebookAuthSetup
     const token = 'any_token'
 
     beforeAll(() => {
@@ -32,7 +32,7 @@ describe('FacebookAuth Service', () => {
     })
 
     beforeEach(() => {
-        sut = FacebookAuthSetup(
+        sut = FacebookAuth(
             facebookApi,
             userAccount,
             crypto

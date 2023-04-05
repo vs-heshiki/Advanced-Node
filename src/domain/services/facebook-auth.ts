@@ -7,13 +7,13 @@ type Setup = (
     facebook: LoadFacebookUser,
     userAccount: LoadUserAccount & SaveUserFacebook,
     token: TokenGenerator
-) => FacebookAuth
+) => FacebookAuthSetup
 type Input = { token: string }
 type Output = { accessToken: string }
 
-export type FacebookAuth = (params: Input) => Promise<Output>
+export type FacebookAuthSetup = (params: Input) => Promise<Output>
 
-export const FacebookAuthSetup: Setup = (facebook, userAccount, token) => async params => {
+export const FacebookAuth: Setup = (facebook, userAccount, token) => async params => {
     const facebookData = await facebook.loadUser(params)
 
     if (facebookData === undefined) throw new AuthenticatorError()
